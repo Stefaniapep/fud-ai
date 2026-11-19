@@ -1,0 +1,15 @@
+<resources>
+    <string name="progress_cut_title">Cut</string>
+    <string name="progress_cut_average">Estimated daily deficit: %1$d %2$s</string>
+    <string name="progress_cut_profile_missing">Set up a profile to estimate maintenance calories.</string>
+    <string name="progress_cut_basis">Current maintenance estimate: %1$d %2$s/day. %3$d of %4$d days logged. Missing days excluded; partial diaries can overestimate deficit. Positive bars: deficit. Negative bars: surplus.</string>
+    <string name="progress_cut_weight_missing">Weight comparison needs at least two days with weigh-ins in each of the opening and closing windows.</string>
+    <string name="progress_cut_weight_averages">Opening average: %1$s %3$s (%4$d days). Closing average: %2$s %3$s (%5$d days). Daily means, up to seven days at each end of the period; shorter periods use separate half-windows. Negative loss means weight gain.</string>
+    <string name="progress_energy_weight_title">Calories, deficit and weight</string>
+    <string name="progress_energy_logged">Total logged: %1$d</string>
+    <string name="progress_energy_deficit">Estimated cumulative deficit: %1$d</string>
+    <string name="progress_energy_basis">Current estimated maintenance: %1$d %2$s/day. %3$d of %4$d days have food records. Missing days are excluded; partial diaries can overestimate deficit. Negative deficit means surplus.</string>
+    <string name="progress_energy_weight_missing">At least two weigh-ins in this period are needed to compare weight change.</string>
+    <string name="progress_energy_weight_loss">Measured weight loss: %1$s %2$s</string>
+    <string name="progress_energy_weight_dates">Weight comparison: %1$s to %2$s. Negative loss means weight gain. Energy and weight use separate scales.</string>
+</resources>

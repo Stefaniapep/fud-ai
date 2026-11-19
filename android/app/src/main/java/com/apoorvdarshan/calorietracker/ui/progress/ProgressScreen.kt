@@ -466,6 +466,21 @@ private fun MyProgressContent(container: AppContainer) {
                             weekly = showsWeeklyStepBars(rangeStartDate, rangeEndDate),
                             historyMayBeMissing = stepsHistoryLimited
                         )
+                        ProgressMetric.CALORIES -> {
+                            val stats = foodRangeStats
+                            if (isLoadingFoodRangeStats || stats == null) ProgressNutritionLoadingCard()
+                            else CalorieSection(stats.dailyCalories, ui.profile?.effectiveCalories ?: 2000)
+                        }
+                        ProgressMetric.CUT -> {
+                            val stats = foodRangeStats
+                            val profile = ui.profile
+                            if (isLoadingFoodRangeStats || stats == null) ProgressNutritionLoadingCard()
+                            else if (profile != null) CutSection(
+                                stats.dailyCalories, ui.entries, profile.tdee.toInt(),
+                                nutritionStartDate, nutritionEndDate, weightMetric
+                            )
+                            else Text(stringResource(R.string.progress_cut_profile_missing))
+                        }
                     }
                 }
             }
@@ -491,7 +506,7 @@ private fun MyProgressContent(container: AppContainer) {
                         }
                     }
                 }
-                ProgressMetric.STEPS -> Unit
+                ProgressMetric.STEPS, ProgressMetric.CALORIES, ProgressMetric.CUT -> Unit
             }
 
             item {
@@ -513,27 +528,6 @@ private fun MyProgressContent(container: AppContainer) {
             } else {
                 val stats = foodRangeStats
                 if (stats != null) {
-                    item {
-                        CardSection {
-                            Box {
-                                CalorieSection(
-                                    dailyCalories = stats.dailyCalories,
-                                    calorieGoal = ui.profile?.effectiveCalories ?: 2000
-                                )
-                                if (isLoadingFoodRangeStats) {
-                                    CircularProgressIndicator(
-                                        modifier = Modifier
-                                            .align(Alignment.TopEnd)
-                                            .padding(4.dp)
-                                            .size(18.dp),
-                                        strokeWidth = 2.dp,
-                                        color = AppColors.Calorie
-                                    )
-                                }
-                            }
-                        }
-                    }
-
                     ui.profile?.let { p ->
                         item {
                             CardSection {
@@ -2282,14 +2276,21 @@ private fun ProgressMetricSelector(
         ProgressMetric.WEIGHT to stringResource(R.string.progress_metric_weight),
         ProgressMetric.BODY_FAT to stringResource(R.string.progress_metric_body_fat),
         ProgressMetric.WORKOUTS to stringResource(R.string.progress_metric_workouts),
-        ProgressMetric.STEPS to stringResource(R.string.progress_metric_steps)
+        ProgressMetric.STEPS to stringResource(R.string.progress_metric_steps),
+        ProgressMetric.CALORIES to stringResource(R.string.progress_calories_section),
+        ProgressMetric.CUT to stringResource(R.string.progress_cut_title)
     )
-    IosStyleSegmentedControl(
-        options = metrics,
-        selected = selected,
-        label = { labels.getValue(it) },
-        onSelect = onSelect
-    )
+    androidx.compose.material3.SecondaryScrollableTabRow(
+        selectedTabIndex = metrics.indexOf(selected).coerceAtLeast(0), edgePadding = 0.dp
+    ) {
+        metrics.forEach { metric ->
+            androidx.compose.material3.Tab(
+                selected = selected == metric,
+                onClick = { onSelect(metric) },
+                text = { Text(labels.getValue(metric), maxLines = 1) }
+            )
+        }
+    }
 }
 
 @Composable

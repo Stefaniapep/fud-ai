@@ -12,12 +12,14 @@ class ProgressMetricTest {
             listOf(
                 ProgressMetric.WEIGHT,
                 ProgressMetric.BODY_FAT,
-                ProgressMetric.WORKOUTS
+                ProgressMetric.WORKOUTS,
+                ProgressMetric.CALORIES,
+                ProgressMetric.CUT
             ),
             availableProgressMetrics(bodyFatAvailable = true, workoutHistoryAvailable = true)
         )
         assertEquals(
-            listOf(ProgressMetric.WEIGHT),
+            listOf(ProgressMetric.WEIGHT, ProgressMetric.CALORIES, ProgressMetric.CUT),
             availableProgressMetrics(bodyFatAvailable = false, workoutHistoryAvailable = false)
         )
     }
@@ -29,7 +31,9 @@ class ProgressMetricTest {
                 ProgressMetric.WEIGHT,
                 ProgressMetric.BODY_FAT,
                 ProgressMetric.WORKOUTS,
-                ProgressMetric.STEPS
+                ProgressMetric.STEPS,
+                ProgressMetric.CALORIES,
+                ProgressMetric.CUT
             ),
             availableProgressMetrics(
                 bodyFatAvailable = true,
@@ -38,7 +42,7 @@ class ProgressMetricTest {
             )
         )
         assertEquals(
-            listOf(ProgressMetric.WEIGHT, ProgressMetric.STEPS),
+            listOf(ProgressMetric.WEIGHT, ProgressMetric.STEPS, ProgressMetric.CALORIES, ProgressMetric.CUT),
             availableProgressMetrics(
                 bodyFatAvailable = false,
                 workoutHistoryAvailable = false,

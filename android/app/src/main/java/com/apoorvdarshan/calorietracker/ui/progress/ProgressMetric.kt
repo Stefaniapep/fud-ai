@@ -4,7 +4,9 @@ enum class ProgressMetric {
     WEIGHT,
     BODY_FAT,
     WORKOUTS,
-    STEPS
+    STEPS,
+    CALORIES,
+    CUT
 }
 
 /** Stable preference order; conditional metrics disappear without reordering the remaining tabs. */
@@ -17,4 +19,6 @@ internal fun availableProgressMetrics(
     if (bodyFatAvailable) add(ProgressMetric.BODY_FAT)
     if (workoutHistoryAvailable) add(ProgressMetric.WORKOUTS)
     if (stepsAvailable) add(ProgressMetric.STEPS)
+    add(ProgressMetric.CALORIES)
+    add(ProgressMetric.CUT)
 }

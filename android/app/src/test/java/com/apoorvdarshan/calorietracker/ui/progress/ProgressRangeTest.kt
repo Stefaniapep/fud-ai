@@ -12,6 +12,43 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 
 class ProgressRangeTest {
+    @Test
+    fun cutCountsOnlyLoggedDaysAndPreservesSurplus() {
+        val first = LocalDate.parse("2024-08-01")
+        val third = first.plusDays(2)
+        val points = dailyCutDeficits(listOf(third to 3000, first to 1000, first to 500), 2000)
+        assertEquals(listOf(first to 500, third to -1000), points)
+    }
+
+    @Test
+    fun cutWeightLossComparesDailyAveragesRatherThanIndividualWeighIns() {
+        val start = LocalDate.parse("2024-08-01")
+        fun reading(day: Int, hour: Int, kg: Double) = com.apoorvdarshan.calorietracker.models.WeightEntry(
+            date = start.plusDays(day.toLong()).atTime(hour, 0).toInstant(ZoneOffset.UTC), weightKg = kg
+        )
+        val readings = listOf(reading(0, 8, 100.0), reading(0, 12, 102.0), reading(1, 8, 99.0),
+            reading(12, 8, 97.0), reading(13, 8, 97.0), reading(7, 8, 140.0))
+        val result = cutWeightChange(readings.reversed(), start, start.plusDays(13), ZoneOffset.UTC)!!
+        assertEquals(100.0, result.firstAverage, 0.0001)
+        assertEquals(111.333333, result.lastAverage, 0.0001)
+        assertEquals(2, result.firstDays)
+        assertEquals(3, result.lastDays)
+    }
+
+    @Test
+    fun cutShortWindowsDoNotOverlapAndMissingReadingsAreNotInvented() {
+        val start = LocalDate.parse("2024-08-01")
+        val readings = (0..6).map { day -> com.apoorvdarshan.calorietracker.models.WeightEntry(
+            date = start.plusDays(day.toLong()).atStartOfDay().toInstant(ZoneOffset.UTC), weightKg = 100.0 - day
+        ) }
+        val result = cutWeightChange(readings, start, start.plusDays(6), ZoneOffset.UTC)!!
+        assertEquals(4.0, result.lostKg, 0.0001)
+        assertEquals(3, result.firstDays)
+        assertEquals(3, result.lastDays)
+        assertNull(cutWeightChange(readings.take(2), start, start.plusDays(6), ZoneOffset.UTC))
+        assertNull(cutWeightChange(readings, start, start.plusDays(1), ZoneOffset.UTC))
+    }
+
     private val zone = ZoneOffset.UTC
     private val today = LocalDate.parse("2026-10-17")
 

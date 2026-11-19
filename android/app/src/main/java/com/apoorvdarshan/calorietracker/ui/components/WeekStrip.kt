@@ -1,5 +1,6 @@
 package com.apoorvdarshan.calorietracker.ui.components
 
+import android.app.DatePickerDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -22,12 +23,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
@@ -38,6 +45,7 @@ import androidx.compose.ui.unit.sp
 import com.apoorvdarshan.calorietracker.ui.theme.AppColors
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.time.temporal.WeekFields
 import java.util.Locale
@@ -75,7 +83,7 @@ import java.util.Locale
  *               }
  *   }.frame(maxWidth: .infinity)
  */
-private const val TOTAL_WEEKS = 53
+private const val TOTAL_WEEKS = 523
 private val CURRENT_WEEK_INDEX = TOTAL_WEEKS - 1
 
 @Composable
@@ -85,6 +93,9 @@ fun WeekEnergyStrip(
     modifier: Modifier = Modifier,
     weekStartsOnMonday: Boolean = true
 ) {
+    val context = LocalContext.current
+    val locale = LocalConfiguration.current.locales[0]
+    val monthFormatter = remember(locale) { DateTimeFormatter.ofPattern("LLLL yyyy", locale) }
     val firstDow = remember(weekStartsOnMonday) {
         if (weekStartsOnMonday) DayOfWeek.MONDAY else DayOfWeek.SUNDAY
     }
@@ -120,7 +131,35 @@ fun WeekEnergyStrip(
         ) {
             items((0 until TOTAL_WEEKS).toList()) { weekIndex ->
                 val weekStart = startOfCurrentWeek.plusWeeks((weekIndex - CURRENT_WEEK_INDEX).toLong())
-                Box(modifier = Modifier.width(pageWidth)) {
+                Column(modifier = Modifier.width(pageWidth)) {
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        val weekEnd = weekStart.plusDays(6)
+                        val startLabel = weekStart.format(monthFormatter)
+                        val endLabel = weekEnd.format(monthFormatter)
+                        Text(
+                            if (startLabel == endLabel) startLabel else "$startLabel / $endLabel",
+                            modifier = Modifier.weight(1f),
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        IconButton(onClick = {
+                            DatePickerDialog(
+                                context,
+                                { _, year, month, day -> onSelect(LocalDate.of(year, month + 1, day)) },
+                                selectedDate.year,
+                                selectedDate.monthValue - 1,
+                                selectedDate.dayOfMonth
+                            ).apply {
+                                datePicker.maxDate = System.currentTimeMillis()
+                            }.show()
+                        }) {
+                            Icon(Icons.Filled.CalendarMonth, contentDescription =
+                                selectedDate.format(DateTimeFormatter.ofLocalizedDate(java.time.format.FormatStyle.FULL).withLocale(locale)))
+                        }
+                    }
                     WeekRow(
                         weekStart = weekStart,
                         selectedDate = selectedDate,

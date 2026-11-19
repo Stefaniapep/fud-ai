@@ -1,0 +1,15 @@
+<resources>
+    <string name="progress_cut_title">Cut</string>
+    <string name="progress_cut_average">Deficit medio giornaliero stimato: %1$d %2$s</string>
+    <string name="progress_cut_profile_missing">Configura il profilo per stimare le calorie di mantenimento.</string>
+    <string name="progress_cut_basis">Mantenimento attuale stimato: %1$d %2$s/giorno. %3$d giorni su %4$d registrati. Giorni mancanti esclusi; diari parziali possono sovrastimare il deficit. Barre positive: deficit. Negative: surplus.</string>
+    <string name="progress_cut_weight_missing">Il confronto richiede almeno due giorni con pesate sia nella finestra iniziale sia in quella finale.</string>
+    <string name="progress_cut_weight_averages">Media iniziale: %1$s %3$s (%4$d giorni). Media finale: %2$s %3$s (%5$d giorni). Medie giornaliere, fino a sette giorni a ogni estremo del periodo; periodi brevi divisi in finestre separate. Perdita negativa indica aumento di peso.</string>
+    <string name="progress_energy_weight_title">Calorie, deficit e peso</string>
+    <string name="progress_energy_logged">Totale registrato: %1$d</string>
+    <string name="progress_energy_deficit">Deficit cumulativo stimato: %1$d</string>
+    <string name="progress_energy_basis">Mantenimento attuale stimato: %1$d %2$s/giorno. %3$d giorni su %4$d con alimentazione registrata. Giorni mancanti esclusi; diari parziali possono sovrastimare il deficit. Deficit negativo indica surplus.</string>
+    <string name="progress_energy_weight_missing">Servono almeno due pesate nel periodo per confrontare la variazione di peso.</string>
+    <string name="progress_energy_weight_loss">Peso perso misurato: %1$s %2$s</string>
+    <string name="progress_energy_weight_dates">Confronto pesate: dal %1$s al %2$s. Valore negativo indica aumento di peso. Energia e peso hanno scale separate.</string>
+</resources>
